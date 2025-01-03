@@ -5,21 +5,40 @@ import PackageDescription
 
 let package = Package(
 	name: "DistractionTimer",
+	platforms: [
+		.iOS(.v17),
+		.macOS(.v14)
+	],
 	products: [
-		// Products define the executables and libraries a package produces, making them visible to other packages.
 		.library(
 			name: "AppFeature",
 			targets: ["AppFeature"]
 		),
+		.library(
+			name: "Model",
+			targets: ["Model"]
+		),
+	],
+	dependencies: [
+		.package(url: "https://github.com/pointfreeco/swift-composable-architecture.git", from: "1.17.0"),
 	],
 	targets: [
-		// Targets are the basic building blocks of a package, defining a module or a test suite.
-		// Targets can depend on other targets in this package and products from dependencies.
 		.target(
-			name: "AppFeature"),
+			name: "AppFeature",
+			dependencies: [
+				.product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
+				"Model",
+			]
+		),
 		.testTarget(
 			name: "AppFeatureTests",
 			dependencies: ["AppFeature"]
+		),
+		.target(
+			name: "Model",
+			resources: [
+				.process("Model.xcdatamodeld")
+			]
 		),
 	]
 )
